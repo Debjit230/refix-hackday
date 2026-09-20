@@ -2618,3 +2618,63 @@ input:focus {
   }
 
 }
+/* =========================================================
+   RE:FIX — DESKTOP HERO LAYOUT FIX
+   Keeps the existing mobile layout unchanged
+========================================================= */
+
+@media (min-width: 701px) {
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+    align-items: center;
+    gap: 55px;
+    min-height: 670px;
+    padding: 80px 0 60px;
+  }
+
+  .hero > div:first-child {
+    min-width: 0;
+  }
+
+  .hero-visual {
+    position: relative;
+    height: 510px;
+    min-width: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .device-card {
+    width: 350px;
+    max-width: 100%;
+  }
+
+  .float-1 {
+    right: 0;
+    top: 105px;
+  }
+
+  .float-2 {
+    left: 5px;
+    bottom: 105px;
+  }
+}
+
+/* Mobile stays single-column */
+@media (max-width: 700px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    gap: 20px;
+  }
+
+  .hero-visual {
+    height: 410px;
+  }
+
+  .device-card {
+    width: 300px;
+    max-width: 100%;
+  }
+}
