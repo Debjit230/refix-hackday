@@ -1,3 +1,4 @@
+// RE:FIX AI diagnosis update
 /* =========================================================
    RE:FIX — AI-POWERED SMART DIAGNOSIS ENGINE
    Step 2E
