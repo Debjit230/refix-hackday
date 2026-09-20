@@ -1,20 +1,23 @@
 /* =========================================================
-   RE:FIX — Smart Diagnosis Engine
-   Step 1C
-   Static frontend — no build step required
+   RE:FIX — AI-POWERED SMART DIAGNOSIS ENGINE
+   Step 2E
+   Static frontend + Vercel AI backend
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-  /* -------------------------------------------------------
+
+  /* =======================================================
      DEVICE PROFILES
-  ------------------------------------------------------- */
+  ======================================================= */
 
   const profiles = {
+
     phone: {
       name: "Smartphone",
       base: 88,
       waste: 180,
       replacement: 12000,
+
       costs: {
         battery: "₹500–₹1,500",
         heat: "₹800–₹2,500",
@@ -30,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       base: 84,
       waste: 2000,
       replacement: 45000,
+
       costs: {
         battery: "₹1,500–₹4,000",
         heat: "₹1,000–₹4,000",
@@ -45,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
       base: 86,
       waste: 420,
       replacement: 18000,
+
       costs: {
         battery: "₹800–₹2,500",
         heat: "₹1,000–₹3,000",
@@ -60,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
       base: 76,
       waste: 90,
       replacement: 4000,
+
       costs: {
         battery: "₹300–₹1,000",
         heat: "₹300–₹1,000",
@@ -75,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
       base: 70,
       waste: 90,
       replacement: 1500,
+
       costs: {
         battery: "₹200–₹600",
         heat: "₹300–₹800",
@@ -90,6 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
       base: 68,
       waste: 350,
       replacement: 5000,
+
       costs: {
         battery: "₹300–₹1,500",
         heat: "₹500–₹2,000",
@@ -99,12 +107,13 @@ document.addEventListener("DOMContentLoaded", () => {
         physical: "₹500–₹3,000"
       }
     }
+
   };
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      PROBLEM ADJUSTMENTS
-  ------------------------------------------------------- */
+  ======================================================= */
 
   const problemAdjustments = {
     battery: 0,
@@ -116,18 +125,21 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      PROBLEM INFORMATION
-  ------------------------------------------------------- */
+  ======================================================= */
 
   const problemInfo = {
+
     battery: {
       label: "Battery issue",
       repairability: 88,
       difficulty: "Easy",
       difficultyClass: "easy",
+
       reason:
         "Battery-related problems are often repairable without replacing the entire device.",
+
       action:
         "Check battery health and get a replacement battery quote."
     },
@@ -137,8 +149,10 @@ document.addEventListener("DOMContentLoaded", () => {
       repairability: 72,
       difficulty: "Medium",
       difficultyClass: "medium",
+
       reason:
         "Overheating can often be caused by dust, thermal issues, blocked airflow, or aging components.",
+
       action:
         "Clean the device, check airflow and thermal condition, then get a diagnostic check."
     },
@@ -148,8 +162,10 @@ document.addEventListener("DOMContentLoaded", () => {
       repairability: 65,
       difficulty: "Medium",
       difficultyClass: "medium",
+
       reason:
         "A damaged display can often be replaced, but the repair cost depends heavily on the device.",
+
       action:
         "Get a screen replacement quote before buying a new device."
     },
@@ -159,8 +175,10 @@ document.addEventListener("DOMContentLoaded", () => {
       repairability: 55,
       difficulty: "Hard",
       difficultyClass: "hard",
+
       reason:
         "Power failures can come from batteries, charging circuits, connectors, or deeper board-level faults.",
+
       action:
         "Have the charging and power circuits professionally diagnosed."
     },
@@ -170,8 +188,10 @@ document.addEventListener("DOMContentLoaded", () => {
       repairability: 92,
       difficulty: "Easy",
       difficultyClass: "easy",
+
       reason:
         "Slow performance can often be improved through storage cleanup, software maintenance, upgrades, or resets.",
+
       action:
         "Clean storage, remove unnecessary software and check whether an upgrade is possible."
     },
@@ -181,17 +201,20 @@ document.addEventListener("DOMContentLoaded", () => {
       repairability: 60,
       difficulty: "Medium",
       difficultyClass: "medium",
+
       reason:
         "Physical damage may be repairable, but the extent of internal damage needs to be checked.",
+
       action:
         "Inspect the physical damage and request a repair estimate before replacing the device."
     }
+
   };
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      CONDITION STATE
-  ------------------------------------------------------- */
+  ======================================================= */
 
   let selectedCondition = "working";
 
@@ -199,7 +222,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".condition-btn");
 
   conditionButtons.forEach((button) => {
+
     button.addEventListener("click", () => {
+
       conditionButtons.forEach((btn) =>
         btn.classList.remove("active")
       );
@@ -208,13 +233,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       selectedCondition =
         button.dataset.condition || "working";
+
     });
+
   });
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      DOM ELEMENTS
-  ------------------------------------------------------- */
+  ======================================================= */
 
   const diagnosisForm =
     document.getElementById("diagnosisForm");
@@ -256,18 +283,30 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("diagnosisExtras");
 
 
-  /* -------------------------------------------------------
-     SCORING
-  ------------------------------------------------------- */
+  /* =======================================================
+     RULE-BASED SCORING
+  ======================================================= */
 
-  function calculateScore(device, problem, age, condition) {
+  function calculateScore(
+    device,
+    problem,
+    age,
+    condition
+  ) {
+
     const profile = profiles[device];
+
+    if (!profile) {
+      return 50;
+    }
 
     let score =
       profile.base +
       (problemAdjustments[problem] || 0);
 
+
     /* Condition */
+
     if (condition === "partial") {
       score -= 8;
     }
@@ -276,7 +315,9 @@ document.addEventListener("DOMContentLoaded", () => {
       score -= 25;
     }
 
+
     /* Age */
+
     if (age === "1") {
       score += 5;
     }
@@ -292,6 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (age === "6") {
       score -= 12;
     }
+
 
     /* Special cases */
 
@@ -316,13 +358,18 @@ document.addEventListener("DOMContentLoaded", () => {
       score -= 8;
     }
 
-    return Math.max(10, Math.min(96, score));
+
+    return Math.max(
+      10,
+      Math.min(96, score)
+    );
+
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      RECOMMENDATION
-  ------------------------------------------------------- */
+  ======================================================= */
 
   function getRecommendation(
     score,
@@ -330,19 +377,6 @@ document.addEventListener("DOMContentLoaded", () => {
     condition,
     problem
   ) {
-    /*
-      REPAIR
-      67+
-
-      REUSE / DONATE
-      48–66
-
-      RECYCLE
-      below 48
-
-      Very old + completely dead devices
-      are directed toward recycling.
-    */
 
     if (
       score < 48 ||
@@ -356,12 +390,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     return "REPAIR";
+
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      CONFIDENCE
-  ------------------------------------------------------- */
+  ======================================================= */
 
   function calculateConfidence(
     score,
@@ -369,6 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
     problem,
     age
   ) {
+
     let confidenceValue = 82;
 
     if (score >= 80 || score <= 35) {
@@ -379,7 +415,10 @@ document.addEventListener("DOMContentLoaded", () => {
       confidenceValue += 3;
     }
 
-    if (problem === "battery" || problem === "slow") {
+    if (
+      problem === "battery" ||
+      problem === "slow"
+    ) {
       confidenceValue += 3;
     }
 
@@ -387,19 +426,24 @@ document.addEventListener("DOMContentLoaded", () => {
       confidenceValue += 2;
     }
 
-    return Math.min(97, confidenceValue);
+    return Math.min(
+      97,
+      confidenceValue
+    );
+
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      COST + SAVING
-  ------------------------------------------------------- */
+  ======================================================= */
 
   function calculateSaving(
     device,
     score,
     recommendation
   ) {
+
     const replacement =
       profiles[device].replacement;
 
@@ -408,53 +452,81 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (recommendation === "REUSE") {
-      return Math.round(replacement * 0.45);
+      return Math.round(
+        replacement * 0.45
+      );
     }
-
-    /*
-      Estimated avoided replacement value.
-      This is a prototype estimate, not a market quote.
-    */
 
     const saving =
       replacement *
-      Math.min(0.75, Math.max(0.25, score / 100));
+      Math.min(
+        0.75,
+        Math.max(
+          0.25,
+          score / 100
+        )
+      );
 
     return Math.round(saving);
+
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      DIFFICULTY
-  ------------------------------------------------------- */
+  ======================================================= */
 
-  function getDifficulty(problem, condition) {
-    let info = problemInfo[problem];
+  function getDifficulty(
+    problem,
+    condition
+  ) {
+
+    const info =
+      problemInfo[problem];
 
     let difficulty =
-      info.difficulty;
+      info?.difficulty || "Medium";
 
     let difficultyClass =
-      info.difficultyClass;
+      info?.difficultyClass || "medium";
 
     if (
       condition === "dead" &&
       problem !== "slow"
     ) {
+
       difficulty = "Hard";
       difficultyClass = "hard";
+
     }
 
     return {
       difficulty,
       difficultyClass
     };
+
   }
 
 
-  /* -------------------------------------------------------
-     RESULT CONTENT
-  ------------------------------------------------------- */
+  /* =======================================================
+     ESCAPE HTML
+  ======================================================= */
+
+  function escapeHTML(value) {
+
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  /* =======================================================
+     RULE-BASED RESULT EXTRAS
+  ======================================================= */
 
   function buildExtras({
     recommendation,
@@ -467,54 +539,88 @@ document.addEventListener("DOMContentLoaded", () => {
     repairCost,
     wasteValue
   }) {
+
     const info =
       problemInfo[problem];
 
     const difficulty =
-      getDifficulty(problem, condition);
+      getDifficulty(
+        problem,
+        condition
+      );
 
-    let reason = info.reason;
+    let reason =
+      info?.reason ||
+      "The result is based on the information provided.";
 
     let icon = "🔧";
 
     if (recommendation === "REUSE") {
+
       icon = "♻️";
 
       reason =
         "The device may still have useful value. Reusing, donating, or repurposing it can extend its life and avoid unnecessary e-waste.";
+
     }
 
     if (recommendation === "RECYCLE") {
+
       icon = "♻️";
 
       reason =
         "The estimated repairability is relatively low for this device condition and age, so responsible recycling can prevent the device from becoming unmanaged e-waste.";
+
     }
 
-    let action = info.action;
+    let action =
+      info?.action ||
+      "Get the device professionally checked.";
 
     if (recommendation === "REUSE") {
+
       action =
         "Back up your data, securely reset the device and consider donating, selling, or repurposing it.";
+
     }
 
     if (recommendation === "RECYCLE") {
+
       action =
         "Back up your data, remove personal accounts and take the device to an authorized e-waste collection point.";
+
     }
 
+
     diagnosisExtras.innerHTML = `
+
       <div class="diagnosis-detail-grid">
 
         <div class="detail-card">
+
           <small>WHY THIS RESULT</small>
-          <strong>${icon} ${recommendation}</strong>
-          <p>${reason}</p>
+
+          <strong>
+            ${icon} ${recommendation}
+          </strong>
+
+          <p>
+            ${escapeHTML(reason)}
+          </p>
+
         </div>
 
+
         <div class="detail-card">
+
           <small>REPAIR DIFFICULTY</small>
-          <strong>${difficulty.difficulty}</strong>
+
+          <strong>
+            ${escapeHTML(
+              difficulty.difficulty
+            )}
+          </strong>
+
           <p>
             ${
               difficulty.difficulty === "Easy"
@@ -524,29 +630,68 @@ document.addEventListener("DOMContentLoaded", () => {
                 : "Likely requires professional diagnosis or specialist repair."
             }
           </p>
+
         </div>
 
+
         <div class="detail-card">
+
           <small>EST. REPAIR COST</small>
-          <strong>${repairCost}</strong>
-          <p>Indicative prototype estimate. Actual pricing varies by device and location.</p>
+
+          <strong>
+            ${escapeHTML(repairCost)}
+          </strong>
+
+          <p>
+            Indicative prototype estimate.
+            Actual pricing varies by device and location.
+          </p>
+
         </div>
 
+
         <div class="detail-card">
+
           <small>POTENTIAL SAVING</small>
-          <strong>₹${saving.toLocaleString("en-IN")}</strong>
-          <p>Estimated avoided replacement value if the device remains useful.</p>
+
+          <strong>
+            ₹${Number(saving).toLocaleString("en-IN")}
+          </strong>
+
+          <p>
+            Estimated avoided replacement value
+            if the device remains useful.
+          </p>
+
         </div>
 
+
         <div class="detail-card">
+
           <small>WASTE AVOIDED</small>
-          <strong>${wasteValue.toLocaleString("en-IN")} g</strong>
-          <p>Approximate device mass kept in use instead of entering the waste stream.</p>
+
+          <strong>
+            ${Number(wasteValue).toLocaleString("en-IN")} g
+          </strong>
+
+          <p>
+            Approximate device mass kept in use
+            instead of entering the waste stream.
+          </p>
+
         </div>
 
+
         <div class="detail-card">
+
           <small>DEVICE</small>
-          <strong>${profiles[device].name}</strong>
+
+          <strong>
+            ${escapeHTML(
+              profiles[device]?.name || device
+            )}
+          </strong>
+
           <p>
             ${
               condition === "working"
@@ -556,29 +701,43 @@ document.addEventListener("DOMContentLoaded", () => {
                 : "Not currently working"
             }
           </p>
+
         </div>
 
       </div>
+
 
       <div class="next-action-card">
-        <div class="next-action-icon">${icon}</div>
+
+        <div class="next-action-icon">
+          ${icon}
+        </div>
 
         <div>
+
           <small>NEXT BEST ACTION</small>
-          <strong>${action}</strong>
+
+          <strong>
+            ${escapeHTML(action)}
+          </strong>
+
         </div>
+
       </div>
+
     `;
 
     return action;
+
   }
 
 
-  /* -------------------------------------------------------
-     DISPLAY RESULT
-  ------------------------------------------------------- */
+  /* =======================================================
+     RULE-BASED RESULT DISPLAY
+  ======================================================= */
 
   function displayResult(data) {
+
     const {
       recommendation,
       score,
@@ -592,36 +751,63 @@ document.addEventListener("DOMContentLoaded", () => {
       wasteValue
     } = data;
 
+
     let title = "";
     let summary = "";
     let badge = "";
     let icon = "";
 
+
     if (recommendation === "REPAIR") {
-      title = "Repair looks practical.";
+
+      title =
+        "Repair looks practical.";
+
       summary =
         "The device has a relatively strong repairability score. Extending its useful life could reduce unnecessary replacement and e-waste.";
-      badge = "🔧 REPAIR";
+
+      badge =
+        "🔧 REPAIR";
+
       icon = "🔧";
+
     }
+
 
     if (recommendation === "REUSE") {
-      title = "Consider reuse or donation.";
+
+      title =
+        "Consider reuse or donation.";
+
       summary =
         "The device may still have useful value, but repair economics should be considered before spending more on it.";
-      badge = "♻️ REUSE";
+
+      badge =
+        "♻️ REUSE";
+
       icon = "♻️";
+
     }
+
 
     if (recommendation === "RECYCLE") {
-      title = "Recycling may be the practical route.";
+
+      title =
+        "Recycling may be the practical route.";
+
       summary =
         "The estimated repairability is relatively low for the device's current condition and age. Responsible recycling can keep valuable materials in the recovery stream.";
-      badge = "♻️ RECYCLE";
+
+      badge =
+        "♻️ RECYCLE";
+
       icon = "♻️";
+
     }
 
+
     resultTitle.textContent = title;
+
     resultSummary.textContent = summary;
 
     confidence.textContent =
@@ -639,24 +825,28 @@ document.addEventListener("DOMContentLoaded", () => {
     recIcon.textContent =
       icon;
 
+
     const info =
       problemInfo[problem];
 
     nextAction.textContent =
-      info.action;
+      info?.action ||
+      "Get the device professionally checked.";
 
-    /*
-      Animate progress bar.
-    */
 
     repairBar.style.width = "0%";
 
     requestAnimationFrame(() => {
+
       setTimeout(() => {
+
         repairBar.style.width =
           `${score}%`;
+
       }, 100);
+
     });
+
 
     buildExtras({
       recommendation,
@@ -670,48 +860,547 @@ document.addEventListener("DOMContentLoaded", () => {
       wasteValue
     });
 
-    resultEmpty.classList.add("hidden");
-    resultContent.classList.remove("hidden");
 
-    /*
-      Restart result animation.
-    */
+    resultEmpty.classList.add(
+      "hidden"
+    );
 
-    resultContent.classList.remove("result-pop");
+    resultContent.classList.remove(
+      "hidden"
+    );
+
+
+    resultContent.classList.remove(
+      "result-pop"
+    );
 
     void resultContent.offsetWidth;
 
-    resultContent.classList.add("result-pop");
+    resultContent.classList.add(
+      "result-pop"
+    );
 
-    /*
-      Store last diagnosis.
-    */
 
     localStorage.setItem(
       "refixLastResult",
       JSON.stringify(data)
     );
+
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
+     AI BACKEND REQUEST
+  ======================================================= */
+
+  async function requestAIDiagnosis({
+    device,
+    problem,
+    age,
+    condition,
+    description
+  }) {
+
+    const response =
+      await fetch(
+        "/api/diagnose",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            device,
+            problem,
+            age,
+            condition,
+            description
+          })
+        }
+      );
+
+
+    let data;
+
+    try {
+
+      data =
+        await response.json();
+
+    } catch {
+
+      throw new Error(
+        "The AI server returned an invalid response."
+      );
+
+    }
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.error ||
+        "AI diagnosis failed."
+      );
+
+    }
+
+
+    if (
+      !data.success ||
+      !data.diagnosis
+    ) {
+
+      throw new Error(
+        "Invalid AI diagnosis response."
+      );
+
+    }
+
+
+    return data.diagnosis;
+
+  }
+
+
+  /* =======================================================
+     AI RESULT DISPLAY
+  ======================================================= */
+
+  function displayAIResult(data) {
+
+    const {
+
+      recommendation,
+      repairability,
+      confidence,
+      diagnosis,
+      reason,
+      difficulty,
+      repairCost,
+      potentialSaving,
+      wasteAvoided,
+      nextAction: aiNextAction
+
+    } = data;
+
+
+    const safeRecommendation =
+      ["REPAIR", "REUSE", "RECYCLE"]
+        .includes(
+          recommendation
+        )
+        ? recommendation
+        : "REPAIR";
+
+
+    const score =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          Number(repairability) || 0
+        )
+      );
+
+
+    const confidenceValue =
+      Math.max(
+        50,
+        Math.min(
+          95,
+          Number(confidence) || 50
+        )
+      );
+
+
+    const saving =
+      Math.max(
+        0,
+        Number(potentialSaving) || 0
+      );
+
+
+    const wasteValue =
+      Math.max(
+        0,
+        Number(wasteAvoided) || 0
+      );
+
+
+    let title = "";
+    let badge = "";
+    let icon = "";
+
+
+    if (
+      safeRecommendation === "REPAIR"
+    ) {
+
+      title =
+        "AI recommends repair.";
+
+      badge =
+        "🔧 REPAIR";
+
+      icon = "🔧";
+
+    }
+
+
+    if (
+      safeRecommendation === "REUSE"
+    ) {
+
+      title =
+        "AI recommends reuse.";
+
+      badge =
+        "♻️ REUSE";
+
+      icon = "♻️";
+
+    }
+
+
+    if (
+      safeRecommendation === "RECYCLE"
+    ) {
+
+      title =
+        "AI recommends recycling.";
+
+      badge =
+        "♻️ RECYCLE";
+
+      icon = "♻️";
+
+    }
+
+
+    resultTitle.textContent =
+      title;
+
+    resultSummary.textContent =
+      `${diagnosis}. ${reason}`;
+
+
+    confidence.textContent =
+      `${confidenceValue}% AI confidence`;
+
+
+    repairScore.textContent =
+      score;
+
+
+    waste.textContent =
+      wasteValue;
+
+
+    actionBadge.textContent =
+      badge;
+
+
+    recIcon.textContent =
+      icon;
+
+
+    nextAction.textContent =
+      aiNextAction;
+
+
+    repairBar.style.width =
+      "0%";
+
+
+    requestAnimationFrame(() => {
+
+      setTimeout(() => {
+
+        repairBar.style.width =
+          `${score}%`;
+
+      }, 100);
+
+    });
+
+
+    diagnosisExtras.innerHTML = `
+
+      <div class="ai-status">
+        AI-powered diagnosis
+      </div>
+
+
+      <div class="diagnosis-detail-grid">
+
+
+        <div class="detail-card">
+
+          <small>AI DIAGNOSIS</small>
+
+          <strong>
+            ${escapeHTML(diagnosis)}
+          </strong>
+
+          <p>
+            Generated from your device
+            information and problem description.
+          </p>
+
+        </div>
+
+
+        <div class="detail-card">
+
+          <small>WHY THIS RESULT</small>
+
+          <strong>
+            ${icon} ${safeRecommendation}
+          </strong>
+
+          <p>
+            ${escapeHTML(reason)}
+          </p>
+
+        </div>
+
+
+        <div class="detail-card">
+
+          <small>REPAIR DIFFICULTY</small>
+
+          <strong>
+            ${escapeHTML(difficulty)}
+          </strong>
+
+          <p>
+            Difficulty is an estimate based
+            on the described problem.
+          </p>
+
+        </div>
+
+
+        <div class="detail-card">
+
+          <small>EST. REPAIR COST</small>
+
+          <strong>
+            ${escapeHTML(repairCost)}
+          </strong>
+
+          <p>
+            Approximate estimate,
+            not a service quote.
+          </p>
+
+        </div>
+
+
+        <div class="detail-card">
+
+          <small>POTENTIAL SAVING</small>
+
+          <strong>
+            ₹${saving.toLocaleString("en-IN")}
+          </strong>
+
+          <p>
+            Estimated avoided replacement value.
+          </p>
+
+        </div>
+
+
+        <div class="detail-card">
+
+          <small>WASTE AVOIDED</small>
+
+          <strong>
+            ${wasteValue.toLocaleString("en-IN")} g
+          </strong>
+
+          <p>
+            Approximate device mass
+            kept in use.
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="next-action-card">
+
+        <div class="next-action-icon">
+          ${icon}
+        </div>
+
+        <div>
+
+          <small>NEXT BEST ACTION</small>
+
+          <strong>
+            ${escapeHTML(aiNextAction)}
+          </strong>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    resultEmpty.classList.add(
+      "hidden"
+    );
+
+    resultContent.classList.remove(
+      "hidden"
+    );
+
+
+    resultContent.classList.remove(
+      "result-pop"
+    );
+
+    void resultContent.offsetWidth;
+
+    resultContent.classList.add(
+      "result-pop"
+    );
+
+
+    const savedData = {
+
+      recommendation:
+        safeRecommendation,
+
+      score,
+
+      confidenceValue,
+
+      saving,
+
+      wasteValue,
+
+      diagnosis,
+
+      reason,
+
+      difficulty,
+
+      repairCost,
+
+      nextAction:
+        aiNextAction,
+
+      timestamp:
+        Date.now()
+
+    };
+
+
+    localStorage.setItem(
+      "refixLastResult",
+      JSON.stringify(savedData)
+    );
+
+
+    setTimeout(() => {
+
+      document
+        .getElementById(
+          "diagnosisResult"
+        )
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+
+    }, 150);
+
+  }
+
+
+  /* =======================================================
      FORM SUBMIT
-  ------------------------------------------------------- */
+  ======================================================= */
 
   if (diagnosisForm) {
+
     diagnosisForm.addEventListener(
       "submit",
-      (event) => {
+      async (event) => {
+
         event.preventDefault();
 
+
         const device =
-          document.getElementById("device").value;
+          document
+            .getElementById("device")
+            ?.value;
+
 
         const problem =
-          document.getElementById("problem").value;
+          document
+            .getElementById("problem")
+            ?.value;
+
 
         const age =
-          document.getElementById("age").value;
+          document
+            .getElementById("age")
+            ?.value;
+
+
+        const description =
+          document
+            .getElementById("description")
+            ?.value
+            ?.trim() || "";
+
+
+        if (
+          !device ||
+          !problem ||
+          !age
+        ) {
+
+          showToast(
+            "Please complete the diagnosis form."
+          );
+
+          return;
+
+        }
+
+
+        if (
+          description.length < 8
+        ) {
+
+          showToast(
+            "Please describe the problem in a little more detail."
+          );
+
+          document
+            .getElementById("description")
+            ?.focus();
+
+          return;
+
+        }
+
+
+        /* -------------------------------------------------
+           RULE-BASED FALLBACK DATA
+        ------------------------------------------------- */
 
         const score =
           calculateScore(
@@ -721,6 +1410,7 @@ document.addEventListener("DOMContentLoaded", () => {
             selectedCondition
           );
 
+
         const recommendation =
           getRecommendation(
             score,
@@ -728,6 +1418,7 @@ document.addEventListener("DOMContentLoaded", () => {
             selectedCondition,
             problem
           );
+
 
         const confidenceValue =
           calculateConfidence(
@@ -737,6 +1428,7 @@ document.addEventListener("DOMContentLoaded", () => {
             age
           );
 
+
         const saving =
           calculateSaving(
             device,
@@ -744,88 +1436,217 @@ document.addEventListener("DOMContentLoaded", () => {
             recommendation
           );
 
-        const repairCost =
-          profiles[device].costs[problem];
 
-        /*
-          Recycling gets full waste value.
-          Repair/reuse gets the same approximate
-          device mass as avoided waste.
-        */
+        const repairCost =
+          profiles[device]
+            ?.costs?.[problem] ||
+          "₹500–₹2,500";
+
 
         const wasteValue =
-          profiles[device].waste;
+          profiles[device]
+            ?.waste ||
+          350;
 
-        const result = {
+
+        const fallbackResult = {
+
           recommendation,
+
           score,
+
           device,
+
           problem,
+
           age,
-          condition: selectedCondition,
+
+          condition:
+            selectedCondition,
+
           confidenceValue,
+
           saving,
+
           repairCost,
+
           wasteValue,
-          timestamp: Date.now()
+
+          timestamp:
+            Date.now()
+
         };
 
-        displayResult(result);
 
-        /*
-          Smoothly move to the result.
-        */
+        /* -------------------------------------------------
+           AI LOADING STATE
+        ------------------------------------------------- */
+
+        diagnosisForm.classList.add(
+          "ai-loading"
+        );
+
+
+        const submitButton =
+          diagnosisForm.querySelector(
+            'button[type="submit"]'
+          );
+
+
+        const originalButtonText =
+          submitButton
+            ?.textContent;
+
+
+        if (submitButton) {
+
+          submitButton.disabled =
+            true;
+
+          submitButton.textContent =
+            "AI IS ANALYZING...";
+
+        }
+
+
+        /* -------------------------------------------------
+           CALL AI
+        ------------------------------------------------- */
+
+        try {
+
+          const aiResult =
+            await requestAIDiagnosis({
+              device,
+              problem,
+              age,
+              condition:
+                selectedCondition,
+              description
+            });
+
+
+          displayAIResult(
+            aiResult
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "AI diagnosis error:",
+            error
+          );
+
+
+          /*
+             AI failed.
+
+             We keep the original
+             rule-based engine working
+             instead of breaking the website.
+          */
+
+          showToast(
+            "AI diagnosis unavailable. Showing standard diagnosis."
+          );
+
+
+          displayResult(
+            fallbackResult
+          );
+
+        } finally {
+
+          diagnosisForm.classList.remove(
+            "ai-loading"
+          );
+
+
+          if (submitButton) {
+
+            submitButton.disabled =
+              false;
+
+            submitButton.textContent =
+              originalButtonText ||
+              "GET DIAGNOSIS";
+
+          }
+
+        }
+
+
+        /* -------------------------------------------------
+           Scroll to result
+        ------------------------------------------------- */
 
         setTimeout(() => {
+
           document
-            .getElementById("diagnosisResult")
+            .getElementById(
+              "diagnosisResult"
+            )
             ?.scrollIntoView({
               behavior: "smooth",
               block: "center"
             });
+
         }, 150);
+
       }
     );
+
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      LOAD PREVIOUS RESULT
-  ------------------------------------------------------- */
+  ======================================================= */
 
   function loadPreviousResult() {
+
     const saved =
       localStorage.getItem(
         "refixLastResult"
       );
 
+
     if (!saved) {
       return;
     }
 
+
     try {
+
       const data =
         JSON.parse(saved);
+
 
       if (
         data &&
         data.device &&
         data.problem
       ) {
+
         /*
-          We intentionally don't automatically
-          open the result on page load.
-          The saved data remains available for
-          future dashboard improvements.
+          Saved result remains available
+          for future dashboard features.
         */
+
       }
+
     } catch (error) {
+
       console.warn(
         "Could not restore saved diagnosis.",
         error
       );
+
     }
+
   }
+
 
   loadPreviousResult();
 
@@ -839,65 +1660,101 @@ document.addEventListener("DOMContentLoaded", () => {
       ".calculator-panel input[data-kg]"
     );
 
+
   const impactTotal =
-    document.getElementById("impactTotal");
+    document.getElementById(
+      "impactTotal"
+    );
+
 
   const impactBar =
-    document.getElementById("impactBar");
+    document.getElementById(
+      "impactBar"
+    );
+
 
   const recoverable =
-    document.getElementById("recoverable");
+    document.getElementById(
+      "recoverable"
+    );
 
 
   function updateImpact() {
+
     let total = 0;
 
-    impactInputs.forEach((input) => {
-      const quantity =
-        Number(input.value) || 0;
 
-      const kg =
-        Number(input.dataset.kg) || 0;
+    impactInputs.forEach(
+      (input) => {
 
-      total +=
-        quantity * kg;
-    });
+        const quantity =
+          Number(input.value) || 0;
+
+
+        const kg =
+          Number(input.dataset.kg) || 0;
+
+
+        total +=
+          quantity * kg;
+
+      }
+    );
+
 
     if (impactTotal) {
+
       impactTotal.textContent =
         total.toFixed(1);
+
     }
 
+
     if (recoverable) {
+
       const recovery =
         Math.min(
           95,
-          Math.round(total * 0.72)
+          Math.round(
+            total * 0.72
+          )
         );
+
 
       recoverable.textContent =
         `${recovery}%`;
+
     }
 
+
     if (impactBar) {
+
       const width =
         Math.min(
           100,
           total * 3
         );
 
+
       impactBar.style.width =
         `${width}%`;
+
     }
+
   }
 
 
-  impactInputs.forEach((input) => {
-    input.addEventListener(
-      "input",
-      updateImpact
-    );
-  });
+  impactInputs.forEach(
+    (input) => {
+
+      input.addEventListener(
+        "input",
+        updateImpact
+      );
+
+    }
+  );
+
 
   updateImpact();
 
@@ -911,16 +1768,23 @@ document.addEventListener("DOMContentLoaded", () => {
       ".circle-btn"
     );
 
-  circleButtons.forEach((button) => {
-    button.addEventListener(
-      "click",
-      () => {
-        showToast(
-          "Recycling locator demo — connect a local recycling API in the next version."
-        );
-      }
-    );
-  });
+
+  circleButtons.forEach(
+    (button) => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          showToast(
+            "Recycling locator demo — connect a local recycling API in the next version."
+          );
+
+        }
+      );
+
+    }
+  );
 
 
   /* =======================================================
@@ -928,27 +1792,43 @@ document.addEventListener("DOMContentLoaded", () => {
   ======================================================= */
 
   const toast =
-    document.getElementById("toast");
+    document.getElementById(
+      "toast"
+    );
+
 
   function showToast(message) {
+
     if (!toast) {
       return;
     }
 
+
     toast.textContent =
       message;
 
-    toast.classList.add("show");
+
+    toast.classList.add(
+      "show"
+    );
+
 
     clearTimeout(
       window.__refixToastTimer
     );
 
+
     window.__refixToastTimer =
       setTimeout(() => {
-        toast.classList.remove("show");
+
+        toast.classList.remove(
+          "show"
+        );
+
       }, 3000);
+
   }
+
 
   window.showToast =
     showToast;
@@ -960,17 +1840,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.scrollToSection =
     function (id) {
+
       const section =
         document.getElementById(id);
+
 
       if (!section) {
         return;
       }
 
+
       section.scrollIntoView({
         behavior: "smooth",
         block: "start"
       });
+
     };
 
 
@@ -983,46 +1867,63 @@ document.addEventListener("DOMContentLoaded", () => {
       ".reveal"
     );
 
+
   if (
     "IntersectionObserver" in window
   ) {
+
     const observer =
       new IntersectionObserver(
         (entries) => {
+
           entries.forEach(
             (entry) => {
+
               if (
                 entry.isIntersecting
               ) {
+
                 entry.target.classList.add(
                   "visible"
                 );
 
+
                 observer.unobserve(
                   entry.target
                 );
+
               }
+
             }
           );
+
         },
         {
           threshold: 0.12
         }
       );
 
+
     revealElements.forEach(
       (element) => {
+
         observer.observe(element);
+
       }
     );
+
   } else {
+
     revealElements.forEach(
       (element) => {
+
         element.classList.add(
           "visible"
         );
+
       }
     );
+
   }
 
 
@@ -1031,25 +1932,33 @@ document.addEventListener("DOMContentLoaded", () => {
   ======================================================= */
 
   function handleHash() {
+
     const hash =
       window.location.hash.replace(
         "#",
         ""
       );
 
+
     if (!hash) {
       return;
     }
 
+
     setTimeout(() => {
+
       scrollToSection(hash);
+
     }, 100);
+
   }
+
 
   window.addEventListener(
     "hashchange",
     handleHash
   );
+
 
   handleHash();
 
@@ -1063,10 +1972,14 @@ document.addEventListener("DOMContentLoaded", () => {
       "[data-year]"
     );
 
+
   yearElements.forEach(
     (element) => {
+
       element.textContent =
         new Date().getFullYear();
+
     }
   );
+
 });
