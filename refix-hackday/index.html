@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="RE:FIX helps you diagnose, repair, reuse and responsibly recycle electronics." />
+  <title>RE:FIX — Repair. Reuse. Recycle.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="nav-wrap">
+    <nav class="nav container">
+      <a class="brand" href="#home"><span class="brand-mark">↻</span> RE:<b>FIX</b></a>
+      <div class="nav-links">
+        <a href="#diagnose">Diagnose</a><a href="#calculator">Impact</a><a href="#recycle">Recycle</a><a href="#how">How it works</a>
+      </div>
+      <a class="btn btn-small btn-primary" href="#diagnose">Start diagnosis <span>→</span></a>
+      <button class="menu" aria-label="Open menu">☰</button>
+    </nav>
+  </header>
+
+  <main id="home">
+    <section class="hero container">
+      <div class="hero-copy reveal">
+        <div class="eyebrow"><span class="pulse"></span> HACKDAY 1.0 · TECH FOR A BETTER TOMORROW</div>
+        <h1>Don't throw it away.<br><em>RE:FIX it.</em></h1>
+        <p class="hero-sub">An intelligent web companion that helps people decide whether an electronic device should be <b>repaired, reused, donated, or recycled.</b></p>
+        <div class="hero-actions"><a class="btn btn-primary" href="#diagnose">🔍 Diagnose a device</a><a class="btn btn-ghost" href="#how">See how it works ↓</a></div>
+        <div class="trust"><span>♻</span> Built for a lower-waste future <i></i><span>⚡</span> Working prototype</div>
+      </div>
+      <div class="hero-visual reveal delay-1">
+        <div class="orb orb-a"></div><div class="orb orb-b"></div>
+        <div class="device-card glass">
+          <div class="device-top"><span>DEVICE ANALYSIS</span><span class="live"><i></i> LIVE</span></div>
+          <div class="phone"><div class="phone-screen"><div class="phone-notch"></div><span class="phone-icon">▣</span><strong>Smartphone</strong><small>Battery drains quickly</small><div class="meter"><span></span></div><div class="phone-status"><b>82%</b><span>repairable</span></div></div></div>
+          <div class="analysis-row"><div><small>RECOMMENDATION</small><strong>🔧 REPAIR</strong></div><div><small>WASTE AVOIDED</small><strong>≈ 180 g</strong></div></div>
+        </div>
+        <div class="float-card float-1 glass"><span>♻</span><div><b>3.42 kg</b><small>e-waste impact</small></div></div>
+        <div class="float-card float-2 glass"><span>🌱</span><div><b>LOWER</b><small>environmental load</small></div></div>
+      </div>
+    </section>
+
+    <section class="stats container reveal">
+      <div><b>1,240<span>kg</span></b><small>potential waste diverted</small></div><div><b>734</b><small>devices assessed</small></div><div><b>82<span>%</span></b><small>average repairability</small></div><div><b>4</b><small>better next actions</small></div>
+    </section>
+
+    <section id="diagnose" class="section container">
+      <div class="section-heading reveal"><div><span class="kicker">01 / SMART DIAGNOSIS</span><h2>What should I do<br>with this device?</h2></div><p>Tell RE:FIX what's wrong. Our decision engine turns a few simple inputs into an actionable next step.</p></div>
+      <div class="diagnose-grid">
+        <form class="panel form-panel reveal" id="diagnosisForm">
+          <div class="panel-head"><span>DEVICE CHECK</span><span class="step">STEP 1 / 1</span></div>
+          <label>What device do you have?<select id="device"><option value="phone">Smartphone</option><option value="laptop">Laptop</option><option value="tablet">Tablet</option><option value="headphones">Headphones / Earbuds</option><option value="charger">Charger / Adapter</option><option value="other">Other electronics</option></select></label>
+          <label>What's the main problem?<select id="problem"><option value="battery">Battery drains / won't hold charge</option><option value="heat">Device becomes hot</option><option value="screen">Screen or display problem</option><option value="power">Won't turn on</option><option value="slow">Slow performance</option><option value="physical">Physical damage</option></select></label>
+          <label>Approximate age<select id="age"><option value="1">Under 1 year</option><option value="2">1–2 years</option><option value="4" selected>3–4 years</option><option value="6">5+ years</option></select></label>
+          <label>Current condition<div class="condition"><button type="button" class="condition-btn active" data-condition="working">Works</button><button type="button" class="condition-btn" data-condition="partial">Partially works</button><button type="button" class="condition-btn" data-condition="dead">Doesn't work</button></div></label>
+          <button class="btn btn-primary full" type="submit">Analyze my device <span>→</span></button>
+          <p class="micro">Prototype guidance only. For electrical safety issues, consult a qualified technician.</p>
+        </form>
+        <div class="panel result-panel reveal delay-1" id="resultPanel">
+          <div class="result-empty" id="resultEmpty"><div class="scan-icon">⌁</div><h3>Your diagnosis will appear here</h3><p>Complete the device check to see repairability, suggested action, and estimated waste avoided.</p></div>
+          <div class="result-content hidden" id="resultContent">
+            <div class="result-top"><span class="kicker">AI-STYLE DECISION ENGINE</span><span class="confidence" id="confidence">92% confidence</span></div>
+            <h3 id="resultTitle">Repair looks practical.</h3><p id="resultSummary"></p>
+            <div class="result-metrics"><div><small>REPAIRABILITY</small><div class="big"><b id="repairScore">82</b><span>%</span></div><div class="progress"><span id="repairBar"></span></div></div><div><small>EST. WASTE AVOIDED</small><div class="big"><b id="waste">180</b><span>g</span></div><p id="actionBadge" class="action-badge">🔧 REPAIR</p></div></div>
+            <div class="recommend"><div class="rec-icon" id="recIcon">🔧</div><div><small>NEXT BEST ACTION</small><strong id="nextAction">Check the battery and consider replacement.</strong></div></div>
+            <div class="result-actions"><button class="btn btn-primary" onclick="scrollToSection('how')">View guidance</button><button class="btn btn-ghost" onclick="window.print()">Save result</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="section alt-section">
+      <div class="container">
+        <div class="section-heading centered reveal"><div><span class="kicker">02 / ONE SIMPLE FLOW</span><h2>From broken device<br>to better decision.</h2></div></div>
+        <div class="steps"><article class="step-card reveal"><span>01</span><div class="step-icon">🔍</div><h3>Diagnose</h3><p>Describe the device, age and symptom in under a minute.</p></article><article class="step-card reveal delay-1"><span>02</span><div class="step-icon">🧠</div><h3>Understand</h3><p>RE:FIX estimates repairability and explains the likely next step.</p></article><article class="step-card reveal delay-2"><span>03</span><div class="step-icon">🌱</div><h3>Act better</h3><p>Repair, reuse, donate or recycle—with impact made visible.</p></article></div>
+      </div>
+    </section>
+
+    <section id="calculator" class="section container">
+      <div class="section-heading reveal"><div><span class="kicker">03 / IMPACT CALCULATOR</span><h2>See the weight of<br>your electronics.</h2></div><p>Estimate how much electronic waste you can keep out of the general waste stream by choosing repair or responsible recycling.</p></div>
+      <div class="impact-grid">
+        <div class="panel calculator-panel reveal">
+          <div class="calc-row"><label>Smartphones <input type="number" min="0" value="2" data-kg="0.18"></label><span>× 0.18 kg</span></div>
+          <div class="calc-row"><label>Laptops <input type="number" min="0" value="1" data-kg="2.0"></label><span>× 2.00 kg</span></div>
+          <div class="calc-row"><label>Chargers <input type="number" min="0" value="4" data-kg="0.09"></label><span>× 0.09 kg</span></div>
+          <div class="calc-row"><label>Earphones <input type="number" min="0" value="2" data-kg="0.05"></label><span>× 0.05 kg</span></div>
+          <div class="calc-row"><label>Power banks <input type="number" min="0" value="1" data-kg="0.20"></label><span>× 0.20 kg</span></div>
+        </div>
+        <div class="impact-card reveal delay-1"><span class="kicker">YOUR ESTIMATE</span><div class="impact-number"><b id="impactTotal">3.42</b><span>kg</span></div><p>estimated electronics in your selected set</p><div class="impact-bar"><span id="impactBar"></span></div><div class="impact-bottom"><div><small>POTENTIALLY RECOVERABLE</small><b id="recoverable">2.19 kg</b></div><div><small>IF RECYCLED RESPONSIBLY</small><b>♻ Better outcome</b></div></div></div>
+      </div>
+    </section>
+
+    <section id="recycle" class="section alt-section">
+      <div class="container">
+        <div class="section-heading reveal"><div><span class="kicker">04 / RESPONSIBLE RECYCLING</span><h2>Know where it can go.</h2></div><p>Explore example recycler profiles for the prototype. In production, this can connect to verified local recycling databases and map services.</p></div>
+        <div class="location-grid"><article class="location-card reveal"><div class="loc-icon">♻</div><div class="loc-main"><div class="loc-title"><h3>GreenTech E-Waste Hub</h3><span>VERIFIED DEMO</span></div><p>Electronics · batteries · accessories</p><div class="loc-meta"><span>📍 3.2 km demo distance</span><span>🟢 Open</span></div></div><button class="circle-btn" aria-label="Open directions">↗</button></article><article class="location-card reveal delay-1"><div class="loc-icon">🔋</div><div class="loc-main"><div class="loc-title"><h3>Battery & Device Drop</h3><span>VERIFIED DEMO</span></div><p>Small electronics · batteries · chargers</p><div class="loc-meta"><span>📍 5.8 km demo distance</span><span>🟢 Open</span></div></div><button class="circle-btn" aria-label="Open directions">↗</button></article><article class="location-card reveal delay-2"><div class="loc-icon">🛠</div><div class="loc-main"><div class="loc-title"><h3>Repair & Reuse Point</h3><span>DEMO</span></div><p>Repair triage · donation · refurbishment</p><div class="loc-meta"><span>📍 7.1 km demo distance</span><span>🟢 Open</span></div></div><button class="circle-btn" aria-label="Open directions">↗</button></article></div>
+        <div class="map-placeholder reveal"><div class="map-grid"></div><div class="map-pin pin-a">♻</div><div class="map-pin pin-b">🔧</div><div class="map-pin pin-c">🔋</div><div class="map-label"><b>Demo recycling network</b><small>Replace with live map + verified centers</small></div></div>
+      </div>
+    </section>
+
+    <section class="section container dashboard-section">
+      <div class="dashboard reveal"><div><span class="kicker">YOUR BETTER-TOMORROW SCORE</span><h2>Small choices add up.</h2><p>Every repair extends a product's useful life. Every responsible recycling action helps recover materials instead of sending them to general waste.</p></div><div class="score-ring"><div><b>78</b><small>/100</small></div></div><div class="dashboard-facts"><div><span>♻</span><b>4</b><small>devices in this demo</small></div><div><span>🔧</span><b>2</b><small>repair opportunities</small></div><div><span>🌱</span><b>3.4kg</b><small>selected e-waste</small></div></div></div>
+    </section>
+
+    <section class="cta container reveal"><div><span class="kicker">RE:FIX / HACKDAY 1.0</span><h2>Give your old tech<br>a second chance.</h2><p>Repair. Reuse. Recycle. Make the next device decision a better one.</p></div><a class="btn btn-light" href="#diagnose">Start a diagnosis →</a></section>
+  </main>
+
+  <footer class="footer"><div class="container footer-inner"><a class="brand" href="#home"><span class="brand-mark">↻</span> RE:<b>FIX</b></a><p>Prototype built for HACKDAY 1.0 · Tech for a Better Tomorrow</p><div><a href="#diagnose">Diagnose</a><a href="#calculator">Impact</a><a href="#recycle">Recycle</a></div></div></footer>
+  <div class="toast" id="toast">Result saved locally.</div>
+  <script src="app.js"></script>
+</body>
+</html>
